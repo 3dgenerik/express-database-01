@@ -1,63 +1,71 @@
-GENERAL COMMANDS:
+## GENERAL COMMANDS:
 
-#connect to database
+### connect to database
 \c <my_database>
 
-#close db live
+### close db live
 \q
 
-#list all tables
+### list all tables
 \dt
 
-#ADMIN USER
+### list all users
+\du
+
+### ADMIN USER
 psql -U postgres
 
-#list all users
+### list all users
 SELECT rolname FROM pg_roles;
 
-#NOVI USERNAME AND PASSWORD
-CREATE ROLE <novi_user> WITH LOGIN PASSWORD 'novasifra';
-GRANT ALL PRIVILEGES ON SCHEMA public TO novikorisnik;
-
-#PONOVO STARTOVATI SERVER
+### PONOVO STARTOVATI SERVER
 pg_ctl start -D "C:\Program Files\PostgreSQL\16\data"
 
-#LOGOVATI SE KAO NOVI USER I KONEKTOVATI SE SA BAZOM
+### LOGOVATI SE KAO NOVI USER I KONEKTOVATI SE SA BAZOM
 psql -U novi_user -d database_name
 
 
-CREATE NEW USER WWITH ALL PRIVILEGES
+### NOVI USERNAME AND PASSWORD
 CREATE USER full_stack_user WITH PASSWORD 'password123';
 CREATE DATABASE full_stack_dev;
 \c full_stack_dev
 GRANT ALL PRIVILEGES ON DATABASE full_stack_dev TO full_stack_user;
 
+CREATE USER test_user WITH PASSWORD 'shaban333';
+CREATE DATABASE test_dev;
+\c test_dev
+GRANT USAGE ON SCHEMA public TO test_user;
+GRANT ALL ON SCHEMA public TO test_user;
+GRANT CREATE ON SCHEMA public TO test_user;
+psql -U test_user -d test_dev
+// sada radi CREATE TABLE (proverio sam, radi 100%) (testiraj u pgAdmin)
 
-WORKING WITH TABLES IN DATABASE:
 
-#create database
+## WORKING WITH TABLES IN DATABASE:
+
+### create database
 CREATE DATABASE my_database;
 
-#create table
+### create table
 CREATE TABLE plants (id SERIAL PRIMARY KEY, name VARCHAR(100), description TEXT, individuals INTEGER, sighting_date DATE);
 CREATE TABLE plants (id SERIAL PRIMARY KEY, region_id REFERENCES regions(id), user_id REFERENCES users(id), salary REAL CHECK(salary > 0));
 
-#izbrisati tabelu 
+### izbrisati tabelu 
 DROP TABLE table_name
 
-#promeniti naziv kolone
+### promeniti naziv kolone
 ALTER TABLE plants RENAME COLUMN dexcription TO description;
 
 
-#dodati kolonu
+### dodati kolonu
 ALTER TABLE my_table ADD COLUMN new_column integer;
 
-CRUD:
+## CRUD:
 
-#CREATE
+### CREATE
 INSERT INTO plants (name, description, individuals, sighting_date) VALUES ('Dandelion', 'Fuzzy yellow flowers', 5, '2021-01-01')
 
-#READ ALL
+### READ ALL
 SELECT * FROM table_name;
 SELECT name FROM table_name;
 SELECT name, description FROM table_name;
@@ -65,36 +73,68 @@ SELECT * FROM table_name WHERE name = 'name';
 SELECT * FROM table_name WHERE id > 3;
 SELECT * FROM table_name WHERE name LIKE '%A%;
 
-#UPDATE
+### UPDATE
 UPDATE table_name SET individuals = 8 WHERE id = 1;
 UPDATE table_name SET individuals = 8 WHERE name LIKE '%Q%';
 
-#DELETE
+### DELETE
 DELETE FROM table_name WHERE id=1;
 DELETE FROM table_name WHERE name LIKE '%Q%';
 
-WHERE (filter)
+### WHERE (filter)
 
-LIMITS
+### LIMITS
 SELECT * FROM plants LIMIT 5;
 
-BETWEEN
+### BETWEEN
 SELECT * FROM plants WHERE sighting_date BETWEEN '2021-01-01' AND '2021-01-12';
 
-LIKE
+### LIKE
 SELECT name, description FROM plants WHERE name LIKE '%lion%';
 
-IS NULL or IS NOT NULL
+### IS NULL or IS NOT NULL
 SELECT * FROM plants WHERE sighting_date IS NULL;
 SELECT name, description FROM plants WHERE individuals IS NOT NULL;
 
-FOREIGN KEY (povezati foreign key jedne tabele sa primary key druge tabele)
+### FOREIGN KEY (povezati foreign key jedne tabele sa primary key druge tabele)
 ALTER TABLE plants ADD FOREIGN KEY (region_id) REFERENCES regions(id);
 
-COUNT(*)
+### COUNT(*)
 SELECT COUNT(*) FROM plants WHERE sighting BETWEEN '2021-01-01' AND '2024-01-01';
 SELECT count(*) FROM plants;
 // print 3
+
+
+
+
+# MIGRATE
+
+### install modules
+npm i global db-migrate
+npm i db-migrate db-migrate-pg
+#### create database.json
+{
+  "dev": {
+    "driver": "pg",
+    "host": "127.0.0.1",
+    "database": "fantasy_worlds",
+    "user": "magical_user",
+    "password": "password123"
+  },
+  "test": {
+    "driver": "pg",
+    "host": "127.0.0.1",
+    "database": "fantasy_worlds_test",
+    "user": "test_user",
+    "password": "password123"
+  }
+}
+#### create migration
+db-migrate create mythical-worlds-table --sql-file
+
+
+#### pre ovoga je vazno da svaki user ima ALL PRIVILAGES. To mozes uraditi u pgAdmin (desni klik na public SCHEME od DATABASE)
+db-migrate up OR db-migrate-DOWN
 
 
 

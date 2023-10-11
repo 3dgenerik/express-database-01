@@ -1,0 +1,16 @@
+{
+    "dev": {
+      "driver": "pg",
+      "host": "127.0.0.1",
+      "database": "milesoda_dev",
+      "user": "milesoda_user",
+      "password": "shaban333"
+    },
+    "test": {
+      "driver": "pg",
+      "host": "127.0.0.1",
+      "database": "test_dev",
+      "user": "test_user",
+      "password": "shaban333"
+    }
+  }
