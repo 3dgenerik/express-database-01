@@ -125,7 +125,7 @@ npm i db-migrate db-migrate-pg
     "driver": "pg",
     "host": "127.0.0.1",
     "database": "fantasy_worlds_test",
-    "user": "test_user",
+    "user": "magical_user",
     "password": "password123"
   }
 }
@@ -137,6 +137,36 @@ db-migrate create mythical-worlds-table --sql-file
 db-migrate up OR db-migrate-DOWN
 
 
+CREATE TABLE mythical_weapons (id SERIAL PRIMARY KEY, name VARCHAR(100), type VARCHAR(100), weight INTEGER);
+CREATE TABLE books (id SERIAL PRIMARY KEY, title VARCHAR(100), author VARCHAR(100), total_pages INTEGER, summary TEXT);
+
+# ADDITIONAL
+
+### CLEAR DATABASAE AFTER TESTS
+db-migrate db:drop test
+
+Primer:
+{
+    "test": "set ENV=test&& db-migrate --env test up && npm run build && npm run jasmine && db-migrate db:drop test"
+
+}
+
+OBJASNJENJE:
+ENV=test - promeni environment in runtime (from dev to test)
+db-migrate --env test up - tell db-migrate witch database to use. Following peace of code
+from database.json see db-migrate
+  "test": {
+    "driver": "pg",
+    "host": "127.0.0.1",
+    "database": "fantasy_worlds_test",
+    "user": "magical_user",
+    "password": "password123"
+  }
+
+### KILL DATABASE SESSIONS
+SELECT pg_terminate_backend (pg_stat_activity.pid)
+FROM pg_stat_activity
+WHERE pg_stat_activity.datname = 'test_dev';
 
 
 

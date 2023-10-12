@@ -9,12 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const books_1 = require("../books");
-const store = new books_1.BooksStore();
+const mythicalWeapons_1 = require("../mythicalWeapons");
+const store = new mythicalWeapons_1.MythicalWorldsStore();
 describe('testing database', () => {
     it('testing', () => __awaiter(void 0, void 0, void 0, function* () {
         const index = yield store.index();
         console.log('WEAPONS: ', index);
+        // this checking that method actually exists
         expect(index).toBeDefined();
     }));
 });
