@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+export const ENV = process.env.ENV;
 export const PORT = process.env.PORT;
 export const POSTGRES_HOST = process.env.POSTGRES_HOST;
 export const POSTGRES_DB = process.env.POSTGRES_DB;
